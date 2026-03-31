@@ -54,7 +54,7 @@ Mover field:   ~~~ ~~~ ~~~ ~~~  (traveling, inward)
 
 ## Documentation Structure
 
-This repository is organized into **three main documents**:
+This repository is organized into **three main documents** plus **technical references**:
 
 ### 1. [Principle of Operation](docs/PRINCIPLE.md)
 **The physics behind the motor.**
@@ -95,6 +95,19 @@ This repository is organized into **three main documents**:
 
 ---
 
+### Technical Reference: [Winding Configuration](docs/WINDING_CONFIG.md)
+**Deep dive into the 3-phase winding.**
+- 18-coil distributed winding pattern
+- Phase shifts (150°, 90°) explained
+- Kirchhoff's law application
+- Magnetic field synthesis
+- How currents create traveling waves
+- Excel sheet walkthrough
+
+**Read this if:** You want to understand *how the phases work together* or *implement custom FOC*.
+
+---
+
 ## Repository Structure
 
 ```
@@ -102,7 +115,8 @@ Tubular-Linear-Motor/
 ├── docs/
 │   ├── PRINCIPLE.md          ← Physics and theory
 │   ├── DESIGN_PRINCIPLES.md  ← Engineering decisions
-│   └── BUILDING.md           ← Construction guide
+│   ├── BUILDING.md           ← Construction guide
+│   └── WINDING_CONFIG.md     ← 3-phase winding deep dive
 ├── images/                   # 3D model renders
 ├── cad/                      # CAD files for manufacturing
 │   ├── 24mm eine Achse SIM.step
@@ -117,6 +131,7 @@ Tubular-Linear-Motor/
 │   ├── images/                   # Field visualizations
 │   └── FILE_GUIDE.md             # File descriptions
 ├── data/                     # Force profile CSV data
+│   └── 260331 Coil Config and Force Profile.xlsx  # Source Excel
 ├── LICENSE
 └── README.md                 # This file
 ```
@@ -171,6 +186,9 @@ See `simulations/linearMotorThreephase.mo`
 
 ### I want to understand the concept
 → Read [docs/PRINCIPLE.md](docs/PRINCIPLE.md)
+
+### I want to understand the winding/phase theory
+→ Read [docs/WINDING_CONFIG.md](docs/WINDING_CONFIG.md)
 
 ### I want to modify the design
 → Read [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md)
