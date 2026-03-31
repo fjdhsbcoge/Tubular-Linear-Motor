@@ -30,6 +30,18 @@ The stator consists of:
 
 This configuration generates a **sinusoidal magnetic field** that radiates outward from the tube.
 
+![Stator Field Lines](../simulations/images/femm_field_lines.png)
+*FEMM simulation showing magnetic field lines from stator (blue) to mover (green). The rounded ferromagnetic discs create the characteristic field bulging.*
+
+### Magnetic Field Profile
+
+The tangential magnetic flux density (B-field) along the stator surface shows a clean sine wave:
+
+![Field Profile](../simulations/images/femm_field_lines_mover.png)
+*Tangential B-field (B.t) vs. position. Peak field ~0.02 T, showing ideal sinusoidal distribution.*
+
+This sine-wave field is the key to the "magnetic gear teeth" — smooth, continuous variations that mesh with the mover's field.
+
 ### Mover Configuration
 
 The mover surrounds the stator and consists of:
@@ -76,6 +88,20 @@ From the simulation data:
 ### Simulation
 
 Force profiles were calculated using **FEMM (Finite Element Method Magnetics)**.
+
+**Simulation Methodology:**
+To speed up computation, a **2D axisymmetric slice** approach was used:
+1. Model a 1mm axial slice of the motor
+2. Simulate 2D field distribution
+3. Multiply force results by circumference (87.976 mm) for total force
+
+This approach is valid for cylindrical motors with uniform cross-section and negligible end effects.
+
+**Simulation Results:**
+- Peak tangential B-field: ~0.02 Tesla
+- Clean sine-wave field distribution confirms design
+- See `/simulations/` for field visualizations
+- See `/data/` for force profile CSV data
 
 See `/data/` for detailed force profile data for different configurations.
 

@@ -90,6 +90,9 @@ Tubular-Linear-Motor/
 ├── docs/                # Documentation
 │   ├── DESIGN.md        # Technical design details
 │   └── BUILD_GUIDE.md   # How to build it
+├── simulations/         # FEMM simulation files
+│   ├── images/          # Field visualizations
+│   └── README.md        # Simulation methodology
 ├── data/                # FEMM simulation data
 │   ├── force_profile_1_layer.csv
 │   ├── force_profile_4_layer.csv
@@ -100,16 +103,19 @@ Tubular-Linear-Motor/
 
 ---
 
-## Simulation Data
+## Simulation Visualizations
 
-Force profiles were calculated using **FEMM (Finite Element Method Magnetics)**.
+FEMM simulation confirms the sine-wave field concept:
 
-The data shows:
-- Force vs. position for different coil layer configurations
-- Fx (direction of motion) and Fy (transverse) force components
-- Individual phase contributions
+**Field Lines:**
+![Field Lines](simulations/images/femm_field_lines.png)
+*Magnetic flux from stator (blue) to mover (green). Rounded ferromagnetic discs create the characteristic bulging pattern.*
 
-See `/data/` directory for CSV files.
+**Field Profile:**
+![Field Profile](simulations/images/femm_field_lines_mover.png)
+*Tangential B-field shows ideal sine wave (~0.02 T peak) — the "magnetic gear teeth" pattern.*
+
+See [simulations/README.md](simulations/README.md) for methodology.
 
 ---
 
