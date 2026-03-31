@@ -56,10 +56,26 @@ The sine-wave field profile validates the design:
 
 This field pattern enables smooth force production with minimal cogging when combined with proper FOC control.
 
+## Simulation Files
+
+Complete FEMM simulation files are available:
+
+| File | Description |
+|------|-------------|
+| `config1_20mm.FEM/.ans` | Phase A excited (2A) |
+| `config1_20mm_phaseB.FEM/.ans` | Phase B excited (2A) |
+| `config1_20mm_phaseC.FEM/.ans` | Phase C excited (2A) |
+| `Config1_force_ripple_*.txt` | Force vs. position data |
+| `Config1_20mm.dxf` | CAD geometry export |
+
+**Peak Force**: ~4.8 N per phase at 2A current
+
+See [FILE_GUIDE.md](FILE_GUIDE.md) for detailed file descriptions, material properties, and usage instructions.
+
 ## Future Simulations
 
 Planned additions:
-- [ ] Full motor model with all 3 phases
-- [ ] Force vs. current characterization
+- [x] 3-phase force characterization
+- [ ] Force vs. current curve
 - [ ] Cogging torque analysis
-- [ ] Eddy current losses (if using conducting materials)
+- [ ] Thermal analysis
