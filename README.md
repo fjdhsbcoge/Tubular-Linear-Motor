@@ -1,9 +1,9 @@
 # Tubular Linear Motor
 
-**Fully Open Source** tubular linear motor design with FOC control. Optimized for high force, low power consumption, and smooth motion.
+**Fully Open Source** tubular linear motor with FOC control. High force density, smooth motion, magnetic gearing principle.
 
 ![Design View 1](images/design_view_1.png)
-*3D model showing the tubular linear motor assembly*
+*3D model showing the complete assembly*
 
 ![Design View 2](images/design_view_2.png)
 *Cross-section view showing internal structure*
@@ -12,73 +12,86 @@
 
 ## How It Works
 
-This motor uses a **magnetic gearing** principle where two sine-wave magnetic fields interlock to produce linear force.
+This motor uses **magnetic gearing** — two sine-wave magnetic fields interlock like gear teeth to produce force without contact.
 
-### The Concept
+**The Stator (inside the tube):**
+- Alternating permanent magnets
+- Steel flux return paths
+- Rounded ferromagnetic discs shape the field into a sine wave
+- Creates an **outward** sine-wave magnetic field
 
-Imagine two sets of gear teeth that don't touch — one set inside a tube (stator), one set surrounding it (mover). Instead of physical teeth, we use magnetic fields shaped like sine waves:
+**The Mover (surrounds the stator):**
+- 3-phase electromagnetic coils
+- Ferromagnetic slots
+- Creates a **traveling** sine-wave field pointing inward
 
-- **Stator field**: Points outward from the tube
-- **Mover field**: Points inward toward the tube
-- **Result**: The fields "mesh" like gears, creating force
-
-### Stator Configuration
-
-Inside the steel tube:
-1. **Alternating disk magnets** (N-S-N-S...)
-2. **Steel disks** (flux paths between magnets)
-3. **Ferromagnetic discs** with rounded outer diameter
-
-The rounded ferromagnetic discs between opposing magnets shape the magnetic field into a smooth **sine wave** radiating outward.
-
-### Mover Configuration
-
-Surrounding the stator:
-1. **3-phase winding** (A, B, C)
-2. **Ferromagnetic slots** between phases
-3. **Star-connected** on one end
-
-The phases are driven with **FOC (Field-Oriented Control)** to create a traveling magnetic field that matches the stator's field pattern.
-
-### Critical Geometry
+**The Result:**
+The two fields "mesh" like gear teeth. As the mover's field travels (driven by 3-phase currents), it pulls the mover along the stator.
 
 ```
-Coil Width = Stator Pole Pitch ÷ 6
+Stator field:  ~~~ ~~~ ~~~ ~~~  (static, outward)
+                    ↕ ↕ ↕ ↕
+Mover field:   ~~~ ~~~ ~~~ ~~~  (traveling, inward)
+                    ↑ ↑ ↑ ↑
+                  Force direction
 ```
 
-This 1/6th relationship ensures the mover's field aligns perfectly with the stator's magnetic "gear teeth."
+**Key insight:** Coil width = Pole pitch / 6. This ensures the magnetic "teeth" align perfectly.
 
 ---
 
-## Specifications
+## Quick Specs
 
 | Parameter | Value |
 |-----------|-------|
-| Control | FOC (Field-Oriented Control) |
+| Diameter | 24 mm |
+| Pole Pitch | 15 mm |
+| Peak Force | ~4.8 N @ 2A (per phase) |
 | Phases | 3 (Star-connected) |
-| Stator Field | Sine-wave, outward |
-| Mover Field | Sine-wave, inward |
-| Circumference | 87.976 mm |
+| Control | FOC (Field-Oriented Control) |
 
 ---
 
-## Documentation
+## Documentation Structure
 
-| Document | Description |
-|----------|-------------|
-| [docs/DESIGN.md](docs/DESIGN.md) | Complete technical documentation |
-| [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md) | Step-by-step build instructions |
-| [data/README.md](data/README.md) | Force profile data explanation |
+This repository is organized into **three main documents**:
+
+### 1. [Principle of Operation](docs/PRINCIPLE.md)
+**The physics behind the motor.**
+- Magnetic gearing concept
+- How sine-wave fields interlock
+- Force production mechanism
+- Synchronous operation
+- Field visualizations from FEMM
+
+**Read this if:** You want to understand *why* it works.
 
 ---
 
-## Key Features
+### 2. [Design Principles](docs/DESIGN_PRINCIPLES.md)
+**The engineering decisions.**
+- Pole pitch selection rationale
+- Material choices (N40 magnets, 1006 steel, Litz wire)
+- Coil geometry calculations
+- Electrical parameters (R, L, M)
+- Thermal design considerations
+- Scaling guidelines
 
-✅ **High Force Density** — Magnetic gearing maximizes force per unit volume  
-✅ **Low Power Consumption** — Efficient FOC control  
-✅ **Smooth Motion** — Sine-wave fields eliminate cogging  
-✅ **Scalable** — Design scales to different sizes and forces  
-✅ **Open Source** — Full documentation for replication
+**Read this if:** You want to *modify* or *optimize* the design.
+
+---
+
+### 3. [Building Instructions](docs/BUILDING.md)
+**Step-by-step construction.**
+- Complete BOM
+- Machining procedures
+- Magnet handling and assembly
+- Coil winding guide
+- Electronics setup
+- FOC commissioning
+- Troubleshooting
+
+**Read this if:** You want to *build* the motor.
 
 ---
 
@@ -86,55 +99,109 @@ This 1/6th relationship ensures the mover's field aligns perfectly with the stat
 
 ```
 Tubular-Linear-Motor/
-├── images/              # 3D model images
-├── docs/                # Documentation
-│   ├── DESIGN.md        # Technical design details
-│   └── BUILD_GUIDE.md   # How to build it
-├── simulations/         # FEMM simulation files
-│   ├── images/          # Field visualizations
-│   └── README.md        # Simulation methodology
-├── data/                # FEMM simulation data
-│   ├── force_profile_1_layer.csv
-│   ├── force_profile_4_layer.csv
-│   └── force_profile_6_layer.csv
+├── docs/
+│   ├── PRINCIPLE.md          ← Physics and theory
+│   ├── DESIGN_PRINCIPLES.md  ← Engineering decisions
+│   └── BUILDING.md           ← Construction guide
+├── images/                   # 3D model renders
+├── cad/                      # CAD files for manufacturing
+│   ├── 24mm eine Achse SIM.step
+│   ├── 24mm eine Achse SIM.f3z
+│   └── README.md
+├── simulations/              # FEMM electromagnetic analysis
+│   ├── config1_20mm.FEM/.ans     # Phase A simulation
+│   ├── config1_20mm_phaseB.FEM   # Phase B simulation
+│   ├── config1_20mm_phaseC.FEM   # Phase C simulation
+│   ├── linearMotorThreephase.mo  # Modelica circuit model
+│   ├── Config1_forceripple.lua   # Force analysis scripts
+│   ├── images/                   # Field visualizations
+│   └── FILE_GUIDE.md             # File descriptions
+├── data/                     # Force profile CSV data
 ├── LICENSE
-└── README.md            # This file
+└── README.md                 # This file
 ```
 
 ---
 
-## Simulation Visualizations
+## Simulation Results
 
-FEMM simulation confirms the sine-wave field concept:
+### FEMM Electromagnetic Analysis
 
-**Field Lines:**
+**Field Line Distribution:**
 ![Field Lines](simulations/images/femm_field_lines.png)
-*Magnetic flux from stator (blue) to mover (green). Rounded ferromagnetic discs create the characteristic bulging pattern.*
+*Magnetic flux from stator (blue) to mover (green). The rounded ferromagnetic discs create the sine-wave field shape.*
 
-**Field Profile:**
+**Tangential Field Profile:**
 ![Field Profile](simulations/images/femm_field_lines_mover.png)
-*Tangential B-field shows ideal sine wave (~0.02 T peak) — the "magnetic gear teeth" pattern.*
+*Clean sine wave (~0.02 T peak) — the "magnetic gear teeth" pattern that enables smooth force.*
 
-See [simulations/README.md](simulations/README.md) for methodology.
+### Force Characteristics
+
+From FEMM simulations at 2A:
+- **Peak force:** ~4.8 N per phase
+- **Force ripple:** Sinusoidal variation with position
+- **Period:** 3.75 mm (90° electrical)
+
+See `/data/` for detailed force vs. position curves.
+
+### Electrical Model
+
+Modelica circuit simulation includes:
+- R = 5.6 Ω (phase resistance)
+- L = 1.15 mH (self-inductance)
+- M = -0.46 mH (mutual inductance)
+- 3-phase star-connected
+
+See `simulations/linearMotorThreephase.mo`
 
 ---
 
-## Building Your Own
+## Key Features
 
-1. **Read** [docs/DESIGN.md](docs/DESIGN.md) to understand the principles
-2. **Follow** [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md) for construction
-3. **Analyze** [data/](data/) for performance expectations
-4. **Build** and share your results!
+✅ **No Contact** — Magnetic gearing eliminates friction and wear
+✅ **High Precision** — Position determined by field alignment
+✅ **Smooth Motion** — Sine-wave fields produce continuous force
+✅ **FOC Control** — Field-oriented control for optimal performance
+✅ **Open Source** — Full documentation and simulation files
+✅ **Scalable** — Design scales to different sizes and forces
+
+---
+
+## Getting Started
+
+### I want to understand the concept
+→ Read [docs/PRINCIPLE.md](docs/PRINCIPLE.md)
+
+### I want to modify the design
+→ Read [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md)
+
+### I want to build one
+→ Read [docs/BUILDING.md](docs/BUILDING.md)
+
+### I want to run simulations
+→ See [simulations/FILE_GUIDE.md](simulations/FILE_GUIDE.md)
+
+---
+
+## Software Used
+
+| Software | Purpose | Link |
+|----------|---------|------|
+| **FEMM** | Electromagnetic simulation | https://www.femm.info/ |
+| **OpenModelica** | Circuit/system simulation | https://openmodelica.org/ |
+| **Fusion 360** | CAD design | https://www.autodesk.com/ |
+| **SimpleFOC** | Motor control (optional) | https://simplefoc.com/ |
 
 ---
 
 ## Contributing
 
-This is an open-source hardware project. Contributions welcome:
-- Build reports
+This is open-source hardware. Contributions welcome:
+- Build reports and photos
 - Design improvements
-- Simulation files
+- Additional simulations
 - Control firmware
+- Documentation improvements
 
 ---
 
@@ -142,6 +209,8 @@ This is an open-source hardware project. Contributions welcome:
 
 See [LICENSE](LICENSE) for details.
 
+**Build it. Improve it. Share it.**
+
 ---
 
-**Build it. Improve it. Share it.**
+*This design uses the magnetic gearing principle with sine-wave fields. Peak force ~4.8N at 2A per phase, 24mm diameter, 15mm pole pitch.*
