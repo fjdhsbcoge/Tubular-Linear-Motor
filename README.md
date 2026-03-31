@@ -46,14 +46,6 @@ Magnetic gearing principle: Two sine-wave fields interlock like gear teeth.
 - `cad/24mm eine Achse SIM.step` — CAD geometry
 - `simulations/config1_20mm.FEM` — FEMM project
 
-## Force Data
-
-From Excel calculations:
-- Peak Fx: ~0.6 N per phase (Config1)
-- Period: 30 mm
-
-See `/data/` for CSV exports.
-
 ## License
 
 See [LICENSE](LICENSE).
