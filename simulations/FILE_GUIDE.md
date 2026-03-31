@@ -17,6 +17,9 @@ This directory contains complete FEMM simulation files for the tubular linear mo
 | `Config1_force_ripple_PhaseB_2A.txt` | Force vs. position (Phase B, 2A) |
 | `Config1_force_ripple_PhaseC_2A.txt` | Force vs. position (Phase C, 2A) |
 | `linearMotorThreephase.mo` | Modelica 3-phase circuit simulation |
+| `Config1_forceripple.lua` | FEMM automation script (Phase A) |
+| `Config1_forceripple_phaseB.lua` | FEMM automation script (Phase B) |
+| `Config1_forceripple_phaseC.lua` | FEMM automation script (Phase C) |
 
 ## Simulation Methodology
 
@@ -216,3 +219,70 @@ The electrical parameters were derived from:
 - Mutual inductance from coupled FEMM runs
 
 These values enable accurate electrical-thermal co-simulation.
+
+---
+
+## FEMM Automation Scripts (Lua)
+
+The `.lua` files automate force ripple analysis in FEMM.
+
+### How the Scripts Work
+
+Each script (`Config1_forceripple.lua`, `Config1_forceripple_phaseB.lua`, `Config1_forceripple_phaseC.lua`) performs:
+
+1. **Initialize** output file for force data
+2. **Loop** through mover positions (0 to 60 mm in 60 steps)
+3. **At each position:**
+   - Solve the magnetic field (`mi_analyze()`)
+   - Load solution (`mi_loadsolution()`)
+   - Select mover group (`mo_groupselectblock(1)`)
+   - Calculate forces (`mo_blockintegral(18/19)`)
+   - Write position, Fx, Fy to file
+4. **Move** the mover to next position (`mi_movetranslate`)
+5. **Repeat** until complete
+
+### Script Parameters
+
+```lua
+local pole_pitch = 15.0     -- 15 mm pole pitch
+local steps = 60            -- 60 position steps
+local total_travel = 60     -- 60 mm total travel
+local move_group = 1        -- FEMM group ID for mover
+```
+
+### Force Calculation
+
+FEMM block integrals used:
+- **Integral 18**: x-component of force (Fx)
+- **Integral 19**: y-component of force (Fy)
+
+These use the **Maxwell stress tensor** method for force calculation.
+
+### Running the Scripts
+
+1. Open FEMM and load the corresponding `.FEM` file
+2. Open Lua console: View → Lua Console
+3. Run script: `dofile("Config1_forceripple.lua")`
+4. Results saved to `.txt` file automatically
+
+### Output Format
+
+```
+Position_mm    Fx_N        Fy_N
+0              0           -3.224...
+1              -0.358...   -3.218...
+...
+```
+
+### Why 3 Separate Scripts?
+
+Each phase requires a different `.FEM` file because:
+- Phase A excited → Phase B and C at 0 A
+- Phase B excited → Phase A and C at 0 A
+- Phase C excited → Phase A and B at 0 A
+
+The superposition principle allows combining these for any 3-phase current combination.
+
+---
+
+*End of File Guide*
