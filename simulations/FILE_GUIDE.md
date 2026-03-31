@@ -16,6 +16,7 @@ This directory contains complete FEMM simulation files for the tubular linear mo
 | `Config1_force_ripple_2A.txt` | Force vs. position (Phase A, 2A) |
 | `Config1_force_ripple_PhaseB_2A.txt` | Force vs. position (Phase B, 2A) |
 | `Config1_force_ripple_PhaseC_2A.txt` | Force vs. position (Phase C, 2A) |
+| `linearMotorThreephase.mo` | Modelica 3-phase circuit simulation |
 
 ## Simulation Methodology
 
@@ -135,3 +136,83 @@ See `images/` folder for:
 - They contain the mesh and field solution
 - Open with corresponding `.FEM` file to view results
 - FEMM is Windows-only but runs via Wine on Linux/Mac
+
+---
+
+## Modelica Circuit Simulation (`linearMotorThreephase.mo`)
+
+This file contains a **3-phase electrical circuit model** of the linear motor for system-level simulation.
+
+### Model Components
+
+| Component | Value | Description |
+|-----------|-------|-------------|
+| **Resistance (R)** | 5.6 Ω | Phase resistance |
+| **Self Inductance (L)** | 1.15 mH | Phase self-inductance |
+| **Mutual Inductance (M)** | -0.46 mH | Coupling between phases |
+| **Voltage (V_peak)** | 8 V | Peak drive voltage |
+| **Frequency (f)** | 50 Hz | Drive frequency |
+
+### Circuit Topology
+
+The model implements a **star-connected 3-phase RL circuit**:
+
+```
+Phase A: SineVoltage → Resistor (5.6Ω) → Inductor (1.15mH) → CurrentSensor
+Phase B: SineVoltage → Resistor (5.6Ω) → Inductor (1.15mH) → CurrentSensor  
+Phase C: SineVoltage → Resistor (5.6Ω) → Inductor (1.15mH) → CurrentSensor
+
+All phases connected to common floating neutral point
+```
+
+### Phase Voltages
+
+3-phase sine waves with 120° (2π/3) displacement:
+- **Phase A**: sin(2πft - 2.618) 
+- **Phase B**: -sin(2πft + 2.618)  
+- **Phase C**: sin(2πft + 1.571)
+
+### Mathematical Sub-Model
+
+The file includes `LinearMotor_MathOnly` — a pure equation-based model:
+
+```modelica
+// 7 variables, 7 equations (determined system)
+Variables: i_a, i_b, i_c, v_La, v_Lb, v_Lc, v_n
+
+// KVL for each phase
+V_peak * sin(2πft - 2.618) - v_n = R*i_a + v_La;
+-V_peak * sin(2πft + 2.618) - v_n = R*i_b + v_Lb;
+V_peak * sin(2πft + 1.571) - v_n = R*i_c + v_Lc;
+
+// Mutual inductance coupling
+v_La = L*der(i_a) + M*der(i_b) + M*der(i_c);
+v_Lb = M*der(i_a) + L*der(i_b) + M*der(i_c);
+v_Lc = M*der(i_a) + M*der(i_b) + L*der(i_c);
+
+// KCL (floating neutral)
+i_a + i_b + i_c = 0;
+```
+
+### Running the Simulation
+
+1. Install **OpenModelica** (https://openmodelica.org/)
+2. Open `linearMotorThreephase.mo`
+3. Simulate with appropriate time step
+4. Plot phase currents vs. time
+
+### Applications
+
+- Verify current ripple under load
+- Analyze transient response
+- Design current controllers
+- Validate FOC algorithms
+
+### Key Parameters from FEMM + Measurements
+
+The electrical parameters were derived from:
+- FEMM simulations (inductance)
+- Coil resistance measurements
+- Mutual inductance from coupled FEMM runs
+
+These values enable accurate electrical-thermal co-simulation.
