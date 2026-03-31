@@ -91,8 +91,8 @@ Where:
 **When fields oppose:** Negative (braking) force
 
 **The "gear ratio":**
-- Electrical angle: 360° = 2 pole pitches
-- Mechanical distance: 1 pole pitch = 15 mm (in this design)
+- Electrical angle: 360° = 1 pole pitch (N-to-N)
+- Mechanical distance: 1 pole pitch = 30 mm (in this design)
 - Force peaks every 90° electrical = 3.75 mm
 
 ### 4. Synchronous Operation
@@ -107,9 +107,9 @@ The motor is **synchronous**:
 Velocity = (Pole Pitch × Electrical Frequency) / 2
 ```
 
-For 50 Hz electrical frequency and 15 mm pole pitch:
+For 50 Hz electrical frequency and 30 mm pole pitch:
 ```
-Velocity = (0.015 m × 50 Hz) / 2 = 0.375 m/s
+Velocity = (0.030 m × 50 Hz) / 2 = 0.75 m/s
 ```
 
 ---
@@ -166,7 +166,7 @@ The tangential B-field along the mover surface:
 **What you see:**
 - Clean sine wave
 - Peak: ~0.02 Tesla
-- Period: 15 mm (pole pitch)
+- Period: 30 mm (pole pitch, N-to-N distance)
 - This is the "magnetic gear tooth" profile
 
 ---

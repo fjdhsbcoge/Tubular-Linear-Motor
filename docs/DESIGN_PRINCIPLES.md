@@ -9,7 +9,8 @@ This document covers the design decisions, calculations, and trade-offs in the t
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | **Outer Diameter** | 24 mm | Standard tube size, manageable force |
-| **Pole Pitch** | 15 mm | Balance between force density and speed |
+| **Pole Pitch (N-to-N)** | 30 mm | Balance between force density and speed |
+| **Pole Width (N-to-S)** | 15 mm | Physical magnet width |
 | **Phases** | 3 | Standard for FOC, good utilization |
 | **Connection** | Star | Simpler wiring, no circulating currents |
 | **Peak Force** | ~4.8 N @ 2A | Per phase, from FEMM simulation |
@@ -21,15 +22,21 @@ This document covers the design decisions, calculations, and trade-offs in the t
 
 ### Pole Pitch Selection
 
-**Pole pitch (τp) = 15 mm**
+**Pole pitch (τp) = 30 mm** (N-to-N distance)
+
+The pole pitch is the distance between two consecutive North poles (or two consecutive South poles). This represents one full electrical cycle (360° electrical).
+
+**Individual pole width = 15 mm** (N-to-S distance)
+
+Each physical magnet (N or S) is 15 mm wide, so the full N-to-N distance is 30 mm.
 
 **Trade-offs:**
-- **Smaller τp**: Higher force density, but more poles needed for same stroke
-- **Larger τp**: Lower electrical frequency for given speed, but lower force density
+- **Smaller pole pitch**: Higher force density, but more poles needed for same stroke
+- **Larger pole pitch**: Lower electrical frequency for given speed, but lower force density
 
 **Speed consideration:**
 At 50 Hz drive frequency:
-- Mechanical speed = (15 mm × 50 Hz) / 2 = **0.375 m/s**
+- Mechanical speed = (30 mm × 50 Hz) / 2 = **0.75 m/s**
 
 For most applications, 0.3-0.5 m/s is a practical speed range.
 
@@ -99,7 +106,7 @@ Rounded ferromagnetic discs between magnets smooth the field.
 
 **Critical formula:**
 ```
-Coil Width = Pole Pitch / 6 = 15 mm / 6 = 2.5 mm
+Coil Width = Pole Pitch / 6 = 30 mm / 6 = 5 mm
 ```
 
 **Why 1/6th?**
@@ -276,7 +283,7 @@ Options:
 | Magnet grade | N40 | N52 | N40 | Cost, sufficient performance |
 | Steel type | 1006 | 1010 | 1006 | Lower hysteresis |
 | Wire type | Litz 0.4mm | Solid 1mm | Litz | High-frequency operation |
-| Pole pitch | 15 mm | 10 mm | 15 mm | Speed/force balance |
+| Pole pitch | 30 mm | 20 mm | 30 mm | Speed/force balance |
 | Phases | 3 | 2 | 3 | Standard FOC |
 | Connection | Star | Delta | Star | No circulating currents |
 

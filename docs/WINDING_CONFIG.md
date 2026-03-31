@@ -9,9 +9,10 @@ This document explains the 3-phase winding configuration, phase shifts, and how 
 The motor uses an **18-coil, 3-phase distributed winding** with a specific pattern that creates a smooth traveling magnetic field.
 
 **Key parameters from Sheet 1:**
-- **Pole Pitch**: 15 mm
+- **Pole Pitch**: 30 mm (N-to-N distance)
+- **Pole Width**: 15 mm (N-to-S distance, one physical magnet)
 - **Coils**: 18 total (6 per phase)
-- **Phase Shift**: 150° and 90° (special configuration)
+- **Phase Shift**: 150° and 90° (optimized configuration)
 - **Current**: 2A per phase (design value)
 
 ---

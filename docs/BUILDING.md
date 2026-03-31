@@ -40,7 +40,7 @@ Step-by-step guide to constructing the tubular linear motor.
 **Tube length formula:**
 ```
 Length = (Pole Pitch × Number of Poles) + End Clearance
-Example: (15 mm × 10 poles) + 20 mm = 170 mm
+Example: (30 mm × 10 poles) + 20 mm = 320 mm
 ```
 
 ### Mover Components
@@ -108,7 +108,7 @@ Example: 100 turns × 12 coils × 100 mm = 120 m
 
 **Profile geometry:**
 - Arc radius: ~5-7 mm
-- Arc extends: ~1/3 of pole pitch (5 mm)
+- Arc extends: ~1/3 of pole pitch (10 mm)
 - Centered between magnet faces
 
 **Check:**
@@ -320,9 +320,9 @@ Inverter GND → Power supply GND
 1. Apply 12V to Phase A only
 2. Mover should lock to position
 3. Apply 12V to Phase B only
-4. Mover should shift by 1/3 pole pitch (5 mm)
+4. Mover should shift by 1/3 pole pitch (10 mm)
 5. Apply 12V to Phase C only
-6. Mover should shift by 2/3 pole pitch (10 mm)
+6. Mover should shift by 2/3 pole pitch (20 mm)
 
 **Success criteria:**
 - Motion in correct direction

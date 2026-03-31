@@ -45,7 +45,7 @@ Mover field:   ~~~ ~~~ ~~~ ~~~  (traveling, inward)
 | Parameter | Value |
 |-----------|-------|
 | Diameter | 24 mm |
-| Pole Pitch | 15 mm |
+| Pole Pitch (N-to-N) | 30 mm |
 | Peak Force | ~4.8 N @ 2A (per phase) |
 | Phases | 3 (Star-connected) |
 | Control | FOC (Field-Oriented Control) |
@@ -231,4 +231,5 @@ See [LICENSE](LICENSE) for details.
 
 ---
 
-*This design uses the magnetic gearing principle with sine-wave fields. Peak force ~4.8N at 2A per phase, 24mm diameter, 15mm pole pitch.*
+*This design uses the magnetic gearing principle with sine-wave fields. Peak force ~4.8N at 2A per phase, 24mm diameter, 30mm pole pitch (N-to-N).*
+
