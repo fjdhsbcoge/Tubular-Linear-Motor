@@ -2,7 +2,25 @@
 
 Open-source tubular linear motor with FOC control.
 
-![Design View 1](images/design_view_1.png)
+## CAD Design
+
+Cross-sectional view showing the internal structure with stator magnets and coil arrangement:
+
+![Design View 1 - Cross Section](images/design_view_1.png)
+
+3D render showing the complete mover assembly with copper windings and carbon fiber housing:
+
+![Design View 2 - 3D Render](images/design_view_2.png)
+
+## Magnetic Field Simulations
+
+FEMM simulation showing the magnetic field lines of the stator with permanent magnets:
+
+![Magnetic Field Lines - Stator](simulations/images/femm_field_lines.png)
+
+Magnetic flux density (B-field) plot along the mover length, showing the sinusoidal field distribution:
+
+![Magnetic Field Strength - Mover](simulations/images/femm_field_lines_mover.png)
 
 ## How It Works
 
@@ -13,6 +31,8 @@ Magnetic gearing principle: Two sine-wave fields interlock like gear teeth.
 
 ## Specs
 
+### General Parameters
+
 | Parameter | Value |
 |-----------|-------|
 | Diameter | 24 mm |
@@ -20,6 +40,18 @@ Magnetic gearing principle: Two sine-wave fields interlock like gear teeth.
 | Circumference | 81.68 mm |
 | Phases | 3, star-connected |
 | Control | FOC |
+
+### Mover (Test Setup)
+
+| Parameter | Value |
+|-----------|-------|
+| Magnet Diameter | 18 mm |
+| Coil Diameter | 25 mm - 35 mm |
+| Coil Configuration | 15 × 5 mm segments |
+| Total Coil Length | 90 mm |
+| **Simulated Force** | **60 N at 2 A** |
+
+> **Note:** With higher financial effort (better magnetic materials, optimized coil winding, enhanced cooling), the design can be pushed to achieve significantly higher forces.
 
 ## Documentation
 
