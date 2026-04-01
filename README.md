@@ -25,8 +25,15 @@ Magnetic flux density (B-field) plot along the mover length, showing the sinusoi
 ## How It Works
 
 Magnetic gearing principle: Two sine-wave fields interlock like gear teeth.
+
+The stator's permanent magnets create a sinusoidal magnetic field pattern along its length. This "magnetic gear rack" provides the stationary field that the mover's traveling field engages with:
+
+![Stator Magnetic Field - Sinusoidal Pattern](simulations/images/stator_field_sinusoidal.jpg)
+
+*The sinusoidal B-field (magnetic flux density) along the stator length. Each period corresponds to one pole pair (N-S), creating the "teeth" of the magnetic gear.*
+
 - **Stator**: Permanent magnets create outward sine-wave field
-- **Mover**: 3-phase coils create traveling inward field
+- **Mover**: 3-phase coils create traveling inward field  
 - **Result**: Fields mesh, producing linear force
 
 ## Specs
