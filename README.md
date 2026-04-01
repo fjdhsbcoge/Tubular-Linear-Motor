@@ -14,19 +14,16 @@ Cross-sectional view showing the internal structure with stator magnets and coil
 
 ## Magnetic Field Simulations
 
-FEMM simulations show the magnetic field distribution throughout the motor: field lines visualize the flux paths from the stator magnets, while the B-field plot confirms the sinusoidal pattern essential for the magnetic gearing principle.
+The motor operates on a magnetic gearing principle where two sine-wave fields interlock like gear teeth. FEMM simulations visualize this interaction: field lines show the flux paths from the stator magnets, while the B-field plots demonstrate the sinusoidal pattern that creates the "magnetic gear rack" the mover engages with.
 
-![Field Lines](simulations/images/femm_field_lines.png) ![B-Field Plot](simulations/images/femm_field_lines_mover.png)
+![Field Lines](simulations/images/femm_field_lines.png)
+*Magnetic field lines from the stator permanent magnets*
 
-## How It Works
+![B-Field Plot](simulations/images/femm_field_lines_mover.png)
+*Flux density along the mover length*
 
-Magnetic gearing principle: Two sine-wave fields interlock like gear teeth.
-
-The stator's permanent magnets create a sinusoidal magnetic field pattern along its length. This "magnetic gear rack" provides the stationary field that the mover's traveling field engages with:
-
-![Stator Magnetic Field - Sinusoidal Pattern](simulations/images/stator_field_sinusoidal.jpg)
-
-*The sinusoidal B-field (magnetic flux density) along the stator length. Each period corresponds to one pole pair (N-S), creating the "teeth" of the magnetic gear.*
+![Stator Field](simulations/images/stator_field_sinusoidal.jpg)
+*Sinusoidal B-field along the stator — each period corresponds to one pole pair (N-S), forming the "teeth" of the magnetic gear*
 
 - **Stator**: Permanent magnets create outward sine-wave field
 - **Mover**: 3-phase coils create traveling inward field  
