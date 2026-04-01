@@ -29,24 +29,48 @@ Mover:   ~~~ ~~~ ~~~ ~~~  (traveling inward)
 
 ## Specifications
 
+### General Parameters
+
 | Parameter | Value |
 |-----------|-------|
+| Diameter | 24 mm |
 | Pole Pitch (N-to-N) | 30 mm |
 | Pole Width (N-to-S) | 15 mm |
 | Circumference | 81.68 mm (from FEMM) |
-| Peak Force | ~0.6 N (Fx per phase, from Excel) |
 | Phases | 3, star-connected |
+| Control | FOC |
+
+### Mover (Test Setup)
+
+| Parameter | Value |
+|-----------|-------|
+| Magnet Diameter | 18 mm |
+| Coil Diameter | 25 mm - 35 mm |
+| Coil Configuration | 15 × 5 mm segments |
+| Total Coil Length | 90 mm |
+| **Simulated Force** | **60 N at 2 A** |
+
+> **Note:** With higher financial effort (better magnetic materials, optimized coil winding, enhanced cooling), the design can be pushed to achieve significantly higher forces.
 
 ---
 
 ## Field Profile
 
-FEMM simulation shows:
+FEMM simulations show the magnetic field distribution throughout the motor: field lines visualize the flux paths from the stator magnets, while the B-field plots demonstrate the sinusoidal pattern that creates the "magnetic gear rack" the mover engages with.
+
+![Field Lines](../simulations/images/femm_field_lines.png)
+*Magnetic field lines from the stator permanent magnets*
+
+![B-Field Plot](../simulations/images/femm_field_lines_mover.png)
+*Flux density along the mover length*
+
+![Stator Field](../simulations/images/stator_field_sinusoidal.jpg)
+*Sinusoidal B-field along the stator — each period corresponds to one pole pair (N-S), forming the "teeth" of the magnetic gear*
+
+**Simulation Results:**
 - Peak B-field: ~0.02 T
 - Period: 30 mm (pole pitch)
 - Clean sine wave confirms field shaping works
-
-See `simulations/images/` for field visualizations.
 
 ---
 
