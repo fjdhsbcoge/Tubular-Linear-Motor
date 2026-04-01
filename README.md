@@ -14,13 +14,9 @@ Cross-sectional view showing the internal structure with stator magnets and coil
 
 ## Magnetic Field Simulations
 
-FEMM simulation showing the magnetic field lines of the stator with permanent magnets:
+FEMM simulations show the magnetic field distribution throughout the motor: field lines visualize the flux paths from the stator magnets, while the B-field plot confirms the sinusoidal pattern essential for the magnetic gearing principle.
 
-![Magnetic Field Lines - Stator](simulations/images/femm_field_lines.png)
-
-Magnetic flux density (B-field) plot along the mover length, showing the sinusoidal field distribution:
-
-![Magnetic Field Strength - Mover](simulations/images/femm_field_lines_mover.png)
+![Field Lines](simulations/images/femm_field_lines.png) ![B-Field Plot](simulations/images/femm_field_lines_mover.png)
 
 ## How It Works
 
