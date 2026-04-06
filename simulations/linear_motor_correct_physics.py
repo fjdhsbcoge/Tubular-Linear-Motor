@@ -162,41 +162,46 @@ def plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, time,
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
-    # Plot 2: Phase Currents over time
+    # Plot 2: Input Voltages and Neutral (showing floating neutral mechanism)
     ax2 = axes[0, 1]
     omega = 2 * np.pi * 50
+    V_amp = 2.0
+    V_offset = 2.0
+    
+    # Unipolar 0-4V PWM output from driver
+    v_U = V_amp*np.sin(omega*time) + V_offset
+    v_V = V_amp*np.sin(omega*time - 2*np.pi/3) + V_offset
+    v_W = V_amp*np.sin(omega*time - 4*np.pi/3) + V_offset
+    v_n = (v_U + v_V + v_W) / 3  # Floating neutral
+    
+    ax2.plot(time*1000, v_U, 'b-', linewidth=2, label='V_U (0-4V)')
+    ax2.plot(time*1000, v_V, 'orange', linewidth=2, label='V_V (0-4V)')
+    ax2.plot(time*1000, v_W, 'g-', linewidth=2, label='V_W (0-4V)')
+    ax2.plot(time*1000, v_n, 'r--', linewidth=2, label='V_neutral (2V)')
+    ax2.axhline(y=2, color='gray', linestyle=':', alpha=0.5)
+    ax2.set_xlabel('Time [ms]')
+    ax2.set_ylabel('Voltage [V]')
+    ax2.set_title('Driver Output Voltages (Unipolar 0-4V)', fontsize=12, fontweight='bold')
+    ax2.legend(fontsize=8)
+    ax2.grid(True, alpha=0.3)
+    ax2.set_ylim(-0.5, 4.5)
+    
+    # Plot 3: Phase Currents (bipolar, created by floating neutral)
+    ax3 = axes[1, 0]
     R = 4.0
-    v_U = 2*np.sin(omega*time) + 2
-    v_V = 2*np.sin(omega*time - 2*np.pi/3) + 2
-    v_W = 2*np.sin(omega*time - 4*np.pi/3) + 2
-    v_n = (v_U + v_V + v_W) / 3
     i_U = (v_U - v_n) / R
     i_V = (v_V - v_n) / R
     i_W = (v_W - v_n) / R
     
-    ax2.plot(time*1000, i_U, 'b-', linewidth=2, label='Phase U (A, a)')
-    ax2.plot(time*1000, i_V, 'orange', linewidth=2, label='Phase V (b, B)')
-    ax2.plot(time*1000, i_W, 'g-', linewidth=2, label='Phase W (C, c)')
-    ax2.axhline(y=0, color='k', linestyle='-', alpha=0.3)
-    ax2.set_xlabel('Time [ms]')
-    ax2.set_ylabel('Current [A]')
-    ax2.set_title('Phase Currents (Bipolar)', fontsize=12, fontweight='bold')
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
-    
-    # Plot 3: Space-Time Diagram of MMK
-    ax3 = axes[1, 0]
-    # Show only first period for clarity
-    t_end_idx = len(time) // 2
-    im = ax3.imshow(mmk_data[:t_end_idx, :], aspect='auto', cmap='RdBu_r',
-                    extent=[positions_mm[0], positions_mm[-1], time[t_end_idx]*1000, 0],
-                    vmin=-0.6, vmax=0.6, interpolation='nearest')
-    ax3.set_xlabel('Position along motor [mm]')
-    ax3.set_ylabel('Time [ms]')
-    ax3.set_title('MMK Space-Time Diagram (Traveling Wave)', fontsize=12, fontweight='bold')
-    ax3.set_xlim(-5, max(coil_positions) + 10)
-    cbar = plt.colorbar(im, ax=ax3)
-    cbar.set_label('MMK [A]', rotation=270, labelpad=20)
+    ax3.plot(time*1000, i_U, 'b-', linewidth=2, label='I_U (±0.5A)')
+    ax3.plot(time*1000, i_V, 'orange', linewidth=2, label='I_V (±0.5A)')
+    ax3.plot(time*1000, i_W, 'g-', linewidth=2, label='I_W (±0.5A)')
+    ax3.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+    ax3.set_xlabel('Time [ms]')
+    ax3.set_ylabel('Current [A]')
+    ax3.set_title('Phase Currents (Bipolar via Floating Neutral)', fontsize=12, fontweight='bold')
+    ax3.legend(fontsize=8)
+    ax3.grid(True, alpha=0.3)
     
     # Plot 4: Force over time
     ax4 = axes[1, 1]
@@ -204,7 +209,7 @@ def plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, time,
     ax4.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
     ax4.set_xlabel('Time [ms]')
     ax4.set_ylabel('Force [N]')
-    ax4.set_title('Resultant Force on Mover', fontsize=12, fontweight='bold')
+    ax4.set_title('Resultant Force on Mover (Relative)', fontsize=12, fontweight='bold')
     ax4.grid(True, alpha=0.3)
     # Add average force line
     avg_force = np.mean(force)

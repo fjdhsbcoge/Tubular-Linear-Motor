@@ -67,7 +67,7 @@ This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC dri
 Unlike a rotating motor where coils are angularly distributed, here the 6 coils are spaced **along the motor length** (0, 5, 10, 15, 20, 25 mm), each interacting with the **local** sinusoidal B-field from the stator magnets.
 
 ![Linear Motor Overview](simulations/images/linear_motor_overview.png)
-*Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch). Top-right: Bipolar phase currents (±0.5A). Bottom-left: Traveling MMK wave moving along motor length. Bottom-right: Resultant force on mover.*
+*Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch) with 18 coil positions marked. Top-right: **Unipolar 0-4V driver outputs** (3 phases) and **floating neutral voltage** (red dashed at 2V) — this is the raw PWM output from SimpleFOC. Bottom-left: **Bipolar ±0.5A phase currents** created by the floating neutral mechanism: I = (V_driver - V_neutral) / R. Bottom-right: Resultant force on mover (relative values).*
 
 ![Linear Motor Snapshots](simulations/images/linear_motor_snapshots.png)
 *MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Force = Σ(MMK × B) at each coil position (relative values shown). With FOC, the mover tracks the field to maintain continuous force.*
