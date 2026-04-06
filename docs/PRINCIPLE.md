@@ -94,8 +94,8 @@ I_phase = (V_driver - V_neutral) / R_phase
 ```
 This yields ±2V effective voltage, producing ±0.5A currents with 4Ω phase resistance.
 
-![Spatial MMK Distribution](../simulations/images/mmk_spatial_with_bars.png)
-*Spatial MMK distribution at electrical angles from 0° to 180°. Six coils (A-b-C-a-B-c at 0°, 60°, 120°, 180°, 240°, 300°) with alternating winding directions create a traveling wave. Dashed colored lines show individual coil contributions; solid black line shows the resultant MMK. Red stars mark the sum at θ=0°, verifying that contributions correctly add up (e.g., +0.724 at ωt=30°, +1.500 at ωt=90°).*
+![Spatial MMK Distribution](../simulations/images/mmk_spatial_layers.png)
+*Spatial MMK distribution showing how the total magnetic field (thick black line) is formed by summing three phase contributions (colored lines). Each phase consists of two coils in the AbCaBc pattern: Phase U = A(0°) + a(180°), Phase V = b(60°) + B(240°), Phase W = C(120°) + c(300°). The text boxes verify the sum at θ=0°: Total MMK = Phase_U + Phase_V + Phase_W. Faint dotted lines show the individual coil contributions.*
 
 ### AbCaBc Winding Configuration
 
