@@ -94,8 +94,8 @@ I_phase = (V_driver - V_neutral) / R_phase
 ```
 This yields ±2V effective voltage, producing ±0.5A currents with 4Ω phase resistance.
 
-![Spatial MMK Distribution](../simulations/images/mmk_spatial.png)
-*Spatial MMK distribution at electrical angles from 0° to 180°. Six coils (A-b-C-a-B-c at 0°, 60°, 120°, 180°, 240°, 300°) with alternating winding directions create a traveling wave. Dashed colored lines show individual coil contributions; solid black line shows the resultant MMK that drives the rotor.*
+![Spatial MMK Distribution](../simulations/images/mmk_spatial_with_bars.png)
+*Spatial MMK distribution at electrical angles from 0° to 180°. Six coils (A-b-C-a-B-c at 0°, 60°, 120°, 180°, 240°, 300°) with alternating winding directions create a traveling wave. Dashed colored lines show individual coil contributions; solid black line shows the resultant MMK. Red stars mark the sum at θ=0°, verifying that contributions correctly add up (e.g., +0.724 at ωt=30°, +1.500 at ωt=90°).*
 
 ### AbCaBc Winding Configuration
 
