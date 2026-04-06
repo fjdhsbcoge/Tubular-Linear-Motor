@@ -91,9 +91,8 @@ def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
     # Spatial grid along motor length (2 pole pitches for visualization)
     positions_mm = np.linspace(-5, 65, 500)  # -5 to 65 mm
     
-    # Stator B-field: sinusoidal along length
-    # B(x) = B_max * sin(2πx/λ) where λ = pole_pitch
-    B_max = 0.5  # Tesla (peak field)
+    # Peak B-field: Using relative scaling - actual force from FEMM is 60N at 2A
+    B_max = 0.5  # Tesla (relative scaling factor, not absolute)
     b_field = B_max * np.sin(2 * np.pi * positions_mm / pole_pitch_mm)
     
     # Calculate MMK distribution and force at each time step
@@ -280,8 +279,10 @@ def main():
     print(f"  Coil positions: {coil_pos} mm")
     print(f"  Peak B-field: {np.max(b_field):.2f} T")
     print(f"  Current amplitude: ±{np.max(np.abs(coil_curr)):.2f} A")
-    print(f"  Average force: {np.mean(force):.3f} N")
-    print(f"  Force ripple: {np.std(force):.3f} N")
+    print(f"  NOTE: Force values are RELATIVE (simplified 1D model)")
+    print(f"  Actual test setup: 60 N at 2 A (from FEMM with full 2D geometry)")
+    print(f"  Average force: {np.mean(force):.3f} N (relative)")
+    print(f"  Force ripple: {np.std(force):.3f} N (relative)")
     
     plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, t,
                                 coil_pos, coil_curr, pole_pitch,

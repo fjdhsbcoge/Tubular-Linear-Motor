@@ -70,13 +70,15 @@ Unlike a rotating motor where coils are angularly distributed, here the 6 coils 
 *Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch). Top-right: Bipolar phase currents (±0.5A). Bottom-left: Traveling MMK wave moving along motor length. Bottom-right: Resultant force on mover.*
 
 ![Linear Motor Snapshots](simulations/images/linear_motor_snapshots.png)
-*MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Force = Σ(MMK × B) at each coil position. At ωt=0°, force peaks at +0.750 N; at ωt=180°, it reverses to -0.750 N. With FOC, the mover tracks the field to maintain continuous force.*
+*MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Force = Σ(MMK × B) at each coil position (relative values shown). With FOC, the mover tracks the field to maintain continuous force.*
 
 **Key insight:** In a linear motor, each coil produces force proportional to its MMK × local B-field. The sum of all 6 coil forces drives the mover. The floating neutral mechanism converts unipolar 0-4V PWM into bipolar ±0.5A currents, creating the traveling MMK wave that "locks" into the stator field.
 
+**Note:** The simulation shows **relative force** values for visualization. The **60 N at 2 A** value comes from detailed FEMM simulations with full 2D geometry including flux concentration effects.
+
 - **Stator**: Permanent magnets create outward sine-wave B-field (static)
-- **Mover**: 6 coils in AbCaBc pattern create traveling MMK wave
-- **Force**: Sum of local MMK × B interactions at each coil position
+- **Mover**: 6 coils in AbCaBc pattern create traveling MMK wave  
+- **Force**: Sum of local MMK × B interactions (relative values in sim, 60N actual from FEMM)
 
 ## Documentation
 

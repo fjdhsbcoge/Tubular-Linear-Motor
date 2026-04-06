@@ -3,10 +3,10 @@
 ## BOM
 
 ### Stator
-- Steel tube: OD 24 mm, ID 20 mm
-- N40 magnets: 20× (dia 19 mm, thickness 3-4 mm)
-- 1006 steel disks: 20× (dia 19 mm, thickness 0.5-1 mm)
-- Field shapers: 20× (dia 19 mm, rounded OD)
+- **Carbon fiber tube**: OD 20 mm, ID 18 mm (contains magnet stack)
+- N40 magnets: 20× (dia 18 mm, thickness 3-4 mm)
+- 1006 steel disks: 20× (dia 18 mm, thickness 0.5-1 mm)
+- Field shapers: 20× (dia 18 mm, rounded OD)
 
 ### Mover
 - Core laminations: 1006 steel

@@ -25,6 +25,8 @@ Mover:   ~~~ ~~~ ~~~ ~~~  (traveling inward)
 
 **Key:** Coil width = Pole pitch / 6 = 5 mm (for 30 mm pole pitch)
 
+**Note:** This simplified Python simulation shows **relative force** values for visualization. The actual **60 N at 2 A** comes from detailed FEMM simulations with full 2D geometry including radial flux and ferromagnetic effects.
+
 ---
 
 ## Specifications

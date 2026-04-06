@@ -26,7 +26,7 @@ This directory contains complete FEMM simulation files for the tubular linear mo
 ### Model Dimensions
 - **Slice thickness**: 1 mm (2D planar simulation)
 - **Model length**: 20 mm (partial stator representation)
-- **Scaling**: Force results multiplied by circumference (87.976 mm)
+- **Scaling**: Force results multiplied by circumference (81.68 mm)
 
 ### Materials Used
 
@@ -150,8 +150,8 @@ This file contains a **3-phase electrical circuit model** of the linear motor fo
 
 | Component | Value | Description |
 |-----------|-------|-------------|
-| **Resistance (R)** | 5.6 Ω | Phase resistance |
-| **Self Inductance (L)** | 1.15 mH | Phase self-inductance |
+| **Resistance (R)** | 4.0 Ω | Phase resistance (measured from test setup) |
+| **Self Inductance (L)** | 1.15 mH | Phase self-inductance (FEMM) |
 | **Mutual Inductance (M)** | -0.46 mH | Coupling between phases |
 | **Voltage (V_peak)** | 8 V | Peak drive voltage |
 | **Frequency (f)** | 50 Hz | Drive frequency |

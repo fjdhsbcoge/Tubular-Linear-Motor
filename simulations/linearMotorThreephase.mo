@@ -1,7 +1,7 @@
 model lineasrmotor_elektrisch
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
     Placement(transformation(origin = {-76, -52}, extent = {{-10, -10}, {10, 10}})));
-  Modelica.Electrical.Analog.Basic.Resistor resistor(R = 5.6)  annotation(
+  Modelica.Electrical.Analog.Basic.Resistor resistor(R = 4.0)  annotation(
     Placement(transformation(origin = {-44, 48}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Electrical.Analog.Basic.Inductor inductor(L(displayUnit = "mH") = 0.00115)  annotation(
     Placement(transformation(origin = {-8, 48}, extent = {{-10, -10}, {10, 10}})));
@@ -17,7 +17,7 @@ model lineasrmotor_elektrisch
     Placement(transformation(origin = {-74, 22}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Electrical.Analog.Sensors.CurrentSensor currentSensor1 annotation(
     Placement(transformation(origin = {44, 22}, extent = {{-10, -10}, {10, 10}})));
-  Modelica.Electrical.Analog.Basic.Resistor resistor2(R = 5.6) annotation(
+  Modelica.Electrical.Analog.Basic.Resistor resistor2(R = 4.0) annotation(
     Placement(transformation(origin = {-42, -4}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Electrical.Analog.Basic.Inductor inductor2(L(displayUnit = "mH") = 0.00115) annotation(
     Placement(transformation(origin = {-6, -4}, extent = {{-10, -10}, {10, 10}})));
