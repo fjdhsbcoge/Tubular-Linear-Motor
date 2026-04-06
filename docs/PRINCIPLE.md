@@ -74,37 +74,50 @@ FEMM simulations show the magnetic field distribution throughout the motor: fiel
 
 ## Star-Connected BLDC Driver Simulation
 
-The motor uses a star-connected 3-phase winding configuration (AbCaBc) with SimpleFOC control. A Python simulation demonstrates the key physics of how unipolar 0-4V PWM outputs create the bipolar currents necessary for rotating magnetic fields.
+The motor uses a star-connected 3-phase winding configuration (AbCaBc) with SimpleFOC control. The simulation below models the **correct physics for a tubular linear motor**: coils distributed **along the motor length**, each interacting with the **local stator B-field** at its position.
 
-![MMK Overview](../simulations/images/mmk_overview.png)
-*Top-left: Unipolar 0-4V driver outputs (sinusoidal PWM with 2V DC offset). Top-right: Floating neutral point voltage (constant 2.0V with balanced resistances). Bottom-left: Resulting bipolar phase currents (±0.5A). Bottom-right: Space-time diagram showing the traveling MMK wave — the diagonal white line indicates wave propagation direction.*
+### Coil Layout Along Motor Length
+
+```
+Position:   0mm    5mm    10mm   15mm   20mm   25mm   30mm (pole pitch)
+            [A]    [b]    [C]    [a]    [B]    [c]
+            │      │      │      │      │      │
+Phase:      U      V      W      U      V      W
+Direction:  +      -      +      -      +      -
+```
+
+The 6 coils are physically separated along the mover, spanning one pole pitch (30 mm). Each coil produces MMK (magnetomotive force) that interacts with the **local** sinusoidal B-field from the stator magnets.
+
+### Simulation Results
+
+![Linear Motor Overview](../simulations/images/linear_motor_overview.png)
+*Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch). Top-right: Bipolar phase currents (±0.5A). Bottom-left: Space-time diagram showing the traveling MMK wave moving along the motor length. Bottom-right: Resultant force on mover (oscillates because at standstill, the relative alignment changes with electrical angle).*
+
+![Linear Motor Snapshots](../simulations/images/linear_motor_snapshots.png)
+*MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Each coil's MMK multiplies by the local B-field to produce force. The sum across all 6 coils gives total force (shown in titles). At ωt=0°, force is maximum (+0.750 N); at ωt=90°, force crosses zero; at ωt=180°, force reverses (-0.750 N).*
 
 ### Key Physics
 
+**Force Calculation:**
+Unlike a rotating motor where all coils are at the same radius, in a linear motor:
+```
+F_total = Σ (MMK_coil_i × B_stator(x_coil_i)) for i = 1 to 6
+```
+
+Each coil sees a different B-field depending on its position along the stator. The traveling MMK wave (created by time-varying 3-phase currents) "locks" into the static sinusoidal B-field and pulls the mover along.
+
 **Floating Neutral Point:**
-In a star-connected motor with isolated neutral, the neutral voltage "floats" to a weighted average of the phase voltages. With equal phase resistances:
+Same as before — the star connection with isolated neutral creates bipolar currents from unipolar 0-4V PWM:
 ```
-V_neutral = (V_U + V_V + V_W) / 3 = 2.0V (constant)
+I_phase = (V_driver - V_neutral) / R_phase = ±0.5 A
 ```
 
-**Bipolar Current Generation:**
-Even with unipolar 0-4V driver outputs, the effective voltage across each phase winding becomes bipolar:
-```
-I_phase = (V_driver - V_neutral) / R_phase
-```
-This yields ±2V effective voltage, producing ±0.5A currents with 4Ω phase resistance.
+**With FOC Control:**
+The force oscillates in the snapshots because the mover is at a fixed position. In operation, FOC controls the phase currents to maintain the MMK wave at a constant offset (typically 90° electrical) from the stator field, producing continuous force in one direction.
 
-![Spatial MMK Distribution](../simulations/images/mmk_spatial_layers.png)
-*Spatial MMK distribution showing how the total magnetic field (thick black line) is formed by summing three phase contributions (colored lines). Each phase consists of two coils in the AbCaBc pattern: Phase U = A(0°) + a(180°), Phase V = b(60°) + B(240°), Phase W = C(120°) + c(300°). The text boxes verify the sum at θ=0°: Total MMK = Phase_U + Phase_V + Phase_W. Faint dotted lines show the individual coil contributions.*
+### Python Simulation
 
-### AbCaBc Winding Configuration
-
-The simulation models the AbCaBc winding pattern:
-- **Phase U**: Coils A (0°) and a (180°) carry current i_U
-- **Phase V**: Coils b (60°) and B (240°) carry current i_V  
-- **Phase W**: Coils C (120°) and c (300°) carry current i_W
-
-Winding directions alternate: A(+), b(-), C(+), a(-), B(+), c(-), creating the traveling magnetic field that pulls the mover along the stator.
+See [`simulations/linear_motor_correct_physics.py`](../simulations/linear_motor_correct_physics.py) for the full simulation code.
 
 ---
 

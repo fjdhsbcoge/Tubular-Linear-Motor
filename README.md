@@ -27,17 +27,19 @@ The motor operates on a magnetic gearing principle where two sine-wave fields in
 
 ## BLDC Star-Connected Motor Simulation
 
-This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and a rotating magnetic field in a star-connected motor. The floating neutral point mechanism allows unipolar driver outputs to generate the bipolar currents necessary for proper motor operation.
+This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and force in a star-connected **tubular linear motor**. Unlike a rotating motor where coils are angularly distributed, here the 6 coils are spaced **along the motor length** (0, 5, 10, 15, 20, 25 mm), each interacting with the **local** sinusoidal B-field from the stator magnets.
 
-![MMK Overview](simulations/images/mmk_overview.png)
-*Overview of driver voltages, neutral point voltage, phase currents, and the resulting traveling MMK wave. Note how the 0-4V unipolar output creates ±0.5A bipolar currents through the floating neutral mechanism.*
+![Linear Motor Overview](simulations/images/linear_motor_overview.png)
+*Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch). Top-right: Bipolar phase currents (±0.5A). Bottom-left: Traveling MMK wave moving along motor length. Bottom-right: Resultant force on mover.*
 
-![Spatial MMK Distribution](simulations/images/mmk_spatial_layers.png)
-*Spatial MMK distribution showing how the total magnetic field (thick black line) is formed by summing three phase contributions (colored lines). Each phase consists of two coils: U = A(0°) + a(180°), V = b(60°) + B(240°), W = C(120°) + c(300°). The text boxes verify the sum at θ=0°: MMK = Phase_U + Phase_V + Phase_W (e.g., at ωt=30°: 0.483 + 0.500 + (-0.258) = 0.724).*
+![Linear Motor Snapshots](simulations/images/linear_motor_snapshots.png)
+*MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Force = Σ(MMK × B) at each coil position. At ωt=0°, force peaks at +0.750 N; at ωt=180°, it reverses to -0.750 N. With FOC, the mover tracks the field to maintain continuous force.*
 
-- **Stator**: Permanent magnets create outward sine-wave field
-- **Mover**: 3-phase coils create traveling inward field  
-- **Result**: Fields mesh, producing linear force
+**Key insight:** In a linear motor, each coil produces force proportional to its MMK × local B-field. The sum of all 6 coil forces drives the mover. The floating neutral mechanism converts unipolar 0-4V PWM into bipolar ±0.5A currents, creating the traveling MMK wave that "locks" into the stator field.
+
+- **Stator**: Permanent magnets create outward sine-wave B-field (static)
+- **Mover**: 6 coils in AbCaBc pattern create traveling MMK wave
+- **Force**: Sum of local MMK × B interactions at each coil position
 
 ## Specs
 
