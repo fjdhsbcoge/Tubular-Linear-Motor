@@ -198,11 +198,11 @@ def plot_spatial_distribution(theta_space, time, currents,
                           np.cos(theta_space - theta_spatial[i]))
             mmk_total += contribution
             ax.plot(np.degrees(theta_space), contribution, 
-                   color=colors[i], alpha=0.3, linestyle='--', linewidth=1.5)
+                   color=colors[i], alpha=0.4, linestyle='--', linewidth=1.5)
         
         # Resultant MMK (thick black line)
         ax.plot(np.degrees(theta_space), mmk_total, 'k-', 
-               linewidth=2.5, label='Resultant')
+               linewidth=2.5, label='Resultant MMK')
         
         # Mark coil positions
         for pos in np.degrees(theta_spatial):
@@ -215,12 +215,85 @@ def plot_spatial_distribution(theta_space, time, currents,
         if idx % 3 == 0:
             ax.set_ylabel('MMK [A·turns]')
         if idx == 0:
-            ax.legend(loc='upper right', fontsize=8)
+            ax.legend(loc='upper right', fontsize=7)
         ax.grid(True, alpha=0.3)
     
     plt.suptitle('Spatial MMK Distribution at Different Electrical Angles\n' + 
-                '(Calculated from Unipolar 0-4V Voltages)', 
+                '(Individual coil contributions sum to form the resultant MMK)', 
                 fontsize=14, fontweight='bold', y=1.02)
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.show()
+    print(f"Saved: {save_path}")
+
+
+def plot_spatial_with_sum_bars(theta_space, time, currents, 
+                                save_path='mmk_spatial_with_bars.png'):
+    """Plot spatial MMK with a bar chart showing the sum at a specific angle."""
+    
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    axes = axes.flatten()
+    
+    # Electrical angles for snapshots
+    snapshots = [0, 30, 60, 90, 120, 180]  # degrees
+    labels = ['0°', '30°', '60°', '90°', '120°', '180°']
+    
+    theta_spatial = np.array([0, 60, 120, 180, 240, 300]) * np.pi/180
+    winding_sign = np.array([1, -1, 1, -1, 1, -1])
+    
+    for idx, (phase_deg, label) in enumerate(zip(snapshots, labels)):
+        # Find closest time index
+        t_idx = int(phase_deg/180 * len(time)/4)
+        
+        ax = axes[idx]
+        
+        # Individual coil contributions (faint dashed)
+        colors = ['blue', 'orange', 'green', 'blue', 'orange', 'green']
+        mmk_total = np.zeros_like(theta_space)
+        
+        for i in range(6):
+            contribution = (winding_sign[i] * currents[i, t_idx] * 
+                          np.cos(theta_space - theta_spatial[i]))
+            mmk_total += contribution
+            ax.plot(np.degrees(theta_space), contribution, 
+                   color=colors[i], alpha=0.4, linestyle='--', linewidth=1.5)
+        
+        # Resultant MMK (thick black line)
+        ax.plot(np.degrees(theta_space), mmk_total, 'k-', 
+               linewidth=2.5, label='Resultant MMK')
+        
+        # Add a vertical line at theta=0 and show the values as a stacked bar
+        theta_check = 0  # Check at spatial angle 0°
+        values_at_check = []
+        for i in range(6):
+            val = winding_sign[i] * currents[i, t_idx] * np.cos(theta_check - theta_spatial[i])
+            values_at_check.append(val)
+        
+        # Plot a marker at the sum point
+        total_at_check = sum(values_at_check)
+        ax.plot(0, total_at_check, 'r*', markersize=15, zorder=10)
+        
+        # Mark coil positions
+        for pos in np.degrees(theta_spatial):
+            ax.axvline(x=pos, color='gray', linestyle=':', alpha=0.3, linewidth=0.8)
+        
+        # Add text showing the sum
+        ax.text(0.02, 0.98, f'Sum at θ=0°: {total_at_check:+.3f}', 
+               transform=ax.transAxes, fontsize=9, verticalalignment='top',
+               bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+        
+        ax.set_title(f'Electrical Angle ωt = {label}', fontsize=11, fontweight='bold')
+        ax.set_xlim(0, 360)
+        ax.set_ylim(-1.5, 1.5)
+        ax.set_xlabel('Spatial Angle [°]')
+        if idx % 3 == 0:
+            ax.set_ylabel('MMK [A·turns]')
+        if idx == 0:
+            ax.legend(loc='upper right', fontsize=7)
+        ax.grid(True, alpha=0.3)
+    
+    plt.suptitle('Spatial MMK Distribution (red star = value at θ=0°)', 
+                fontsize=14, fontweight='bold', y=1.01)
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
     plt.show()
@@ -251,6 +324,8 @@ def main():
                   'mmk_overview.png')
     plot_spatial_distribution(theta_space, time, currents, 
                                'mmk_spatial.png')
+    plot_spatial_with_sum_bars(theta_space, time, currents,
+                                'mmk_spatial_with_bars.png')
     
     print("\nKey Insight:")
     print("  Unipolar 0-4V voltages create bipolar currents through the")
