@@ -72,6 +72,40 @@ FEMM simulations show the magnetic field distribution throughout the motor: fiel
 - Period: 30 mm (pole pitch)
 - Clean sine wave confirms field shaping works
 
+## Star-Connected BLDC Driver Simulation
+
+The motor uses a star-connected 3-phase winding configuration (AbCaBc) with SimpleFOC control. A Python simulation demonstrates the key physics of how unipolar 0-4V PWM outputs create the bipolar currents necessary for rotating magnetic fields.
+
+![MMK Overview](../simulations/images/mmk_overview.png)
+*Top-left: Unipolar 0-4V driver outputs (sinusoidal PWM with 2V DC offset). Top-right: Floating neutral point voltage (constant 2.0V with balanced resistances). Bottom-left: Resulting bipolar phase currents (±0.5A). Bottom-right: Space-time diagram showing the traveling MMK wave — the diagonal white line indicates wave propagation direction.*
+
+### Key Physics
+
+**Floating Neutral Point:**
+In a star-connected motor with isolated neutral, the neutral voltage "floats" to a weighted average of the phase voltages. With equal phase resistances:
+```
+V_neutral = (V_U + V_V + V_W) / 3 = 2.0V (constant)
+```
+
+**Bipolar Current Generation:**
+Even with unipolar 0-4V driver outputs, the effective voltage across each phase winding becomes bipolar:
+```
+I_phase = (V_driver - V_neutral) / R_phase
+```
+This yields ±2V effective voltage, producing ±0.5A currents with 4Ω phase resistance.
+
+![Spatial MMK Distribution](../simulations/images/mmk_spatial.png)
+*Spatial MMK distribution at electrical angles from 0° to 180°. Six coils (A-b-C-a-B-c at 0°, 60°, 120°, 180°, 240°, 300°) with alternating winding directions create a traveling wave. Dashed colored lines show individual coil contributions; solid black line shows the resultant MMK that drives the rotor.*
+
+### AbCaBc Winding Configuration
+
+The simulation models the AbCaBc winding pattern:
+- **Phase U**: Coils A (0°) and a (180°) carry current i_U
+- **Phase V**: Coils b (60°) and B (240°) carry current i_V  
+- **Phase W**: Coils C (120°) and c (300°) carry current i_W
+
+Winding directions alternate: A(+), b(-), C(+), a(-), B(+), c(-), creating the traveling magnetic field that pulls the mover along the stator.
+
 ---
 
 *For construction details, see BUILDING.md. For winding configuration, see WINDING_CONFIG.md.*

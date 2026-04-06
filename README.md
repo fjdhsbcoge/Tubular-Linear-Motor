@@ -25,6 +25,16 @@ The motor operates on a magnetic gearing principle where two sine-wave fields in
 ![Stator Field](simulations/images/stator_field_sinusoidal.jpg)
 *Sinusoidal B-field along the stator — each period corresponds to one pole pair (N-S), forming the "teeth" of the magnetic gear*
 
+## BLDC Star-Connected Motor Simulation
+
+This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and a rotating magnetic field in a star-connected motor. The floating neutral point mechanism allows unipolar driver outputs to generate the bipolar currents necessary for proper motor operation.
+
+![MMK Overview](simulations/images/mmk_overview.png)
+*Overview of driver voltages, neutral point voltage, phase currents, and the resulting traveling MMK wave. Note how the 0-4V unipolar output creates ±0.5A bipolar currents through the floating neutral mechanism.*
+
+![Spatial MMK Distribution](simulations/images/mmk_spatial.png)
+*Spatial MMK distribution at different electrical angles (0° to 180°). The six coils (A-b-C-a-B-c) create a traveling wave that rotates the magnetic field. Individual coil contributions (dashed) sum to form the resultant MMK (solid black line).*
+
 - **Stator**: Permanent magnets create outward sine-wave field
 - **Mover**: 3-phase coils create traveling inward field  
 - **Result**: Fields mesh, producing linear force
