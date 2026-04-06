@@ -1,6 +1,41 @@
 # Tubular Linear Motor
 
-Open-source tubular linear motor with FOC control.
+Open-source tubular linear motor with FOC control. **Parametric design** — scalable dimensions with invariant ratios.
+
+## Design Overview
+
+This project provides a **general parametric design** for tubular linear motors that can be scaled to different sizes while maintaining proper field geometry. The repository also documents a **specific test setup** being built for initial verification.
+
+### Parametric Design Principles
+
+The motor follows these invariant relationships:
+
+| Ratio | Value | Description |
+|-------|-------|-------------|
+| Coil width / Pole pitch | 1/6 | 6 coils per pole pitch (AbCaBc) |
+| Spacer width / Magnet width | 0.9–1.2 | Flux shaping optimization |
+| Edge rounding | ~5 × disk diameter | Sinusoidal field formation |
+
+**General Formula:**
+```
+Mover: AbCaBc repeated X times
+Width of one AbCaBc block = Pole pitch (λ)
+Total mover length = X × λ
+```
+
+### Test Setup (Being Verified)
+
+The simulations and CAD files in this repository represent a specific test configuration:
+
+| Parameter | Value |
+|-----------|-------|
+| Outer Diameter | 24 mm |
+| Pole Pitch (λ) | 30 mm |
+| Coil Width | 5 mm (λ/6) |
+| Mover Length | 90 mm (3× λ) |
+| Simulated Force | 60 N at 2 A |
+
+See [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) for complete scaling guidelines and how to choose electrical parameters (resistance, inductance) based on driver capabilities and force requirements.
 
 ## CAD Design
 
@@ -25,9 +60,11 @@ The motor operates on a magnetic gearing principle where two sine-wave fields in
 ![Stator Field](simulations/images/stator_field_sinusoidal.jpg)
 *Sinusoidal B-field along the stator — each period corresponds to one pole pair (N-S), forming the "teeth" of the magnetic gear*
 
-## BLDC Star-Connected Motor Simulation
+## BLDC Star-Connected Motor Simulation (Test Setup)
 
-This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and force in a star-connected **tubular linear motor**. Unlike a rotating motor where coils are angularly distributed, here the 6 coils are spaced **along the motor length** (0, 5, 10, 15, 20, 25 mm), each interacting with the **local** sinusoidal B-field from the stator magnets.
+This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and force. It models the **test setup** configuration (30mm pole pitch, 6 coils spanning one pole pitch). The general parametric design allows scaling — see [DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md).
+
+Unlike a rotating motor where coils are angularly distributed, here the 6 coils are spaced **along the motor length** (0, 5, 10, 15, 20, 25 mm), each interacting with the **local** sinusoidal B-field from the stator magnets.
 
 ![Linear Motor Overview](simulations/images/linear_motor_overview.png)
 *Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch). Top-right: Bipolar phase currents (±0.5A). Bottom-left: Traveling MMK wave moving along motor length. Bottom-right: Resultant force on mover.*
@@ -41,37 +78,13 @@ This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC dri
 - **Mover**: 6 coils in AbCaBc pattern create traveling MMK wave
 - **Force**: Sum of local MMK × B interactions at each coil position
 
-## Specs
-
-### General Parameters
-
-| Parameter | Value |
-|-----------|-------|
-| Diameter | 24 mm |
-| Pole Pitch | 30 mm (N-to-N) |
-| Circumference | 81.68 mm |
-| Phases | 3, star-connected |
-| Control | FOC |
-
-### Mover (Test Setup)
-
-| Parameter | Value |
-|-----------|-------|
-| Magnet Diameter | 18 mm |
-| Coil Diameter | 25 mm - 35 mm |
-| Coil Configuration | 15 × 5 mm segments |
-| Total Coil Length | 90 mm |
-| **Simulated Force** | **60 N at 2 A** |
-
-> **Note:** With higher financial effort (better magnetic materials, optimized coil winding, enhanced cooling), the design can be pushed to achieve significantly higher forces.
-
 ## Documentation
 
 | Document | Content |
 |----------|---------|
 | [docs/PRINCIPLE.md](docs/PRINCIPLE.md) | Physics explanation |
 | [docs/WINDING_CONFIG.md](docs/WINDING_CONFIG.md) | 3-phase winding theory |
-| [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) | Design parameters |
+| [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) | **Parametric design & test setup specs** |
 | [docs/BUILDING.md](docs/BUILDING.md) | Construction guide |
 
 ## Repository
@@ -79,16 +92,20 @@ This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC dri
 ```
 ├── docs/               # Documentation
 ├── cad/                # CAD files (.step, .f3z)
-├── simulations/        # FEMM files
+├── simulations/        # FEMM + Python simulations
 ├── data/               # Force profiles (Excel + CSV)
-└── images/             # 3D renders
+└── images/             # 3D renders & plots
 ```
 
-## Key Files
+## Verification Plan
 
-- `data/260331 Coil Config and Force Profile.xlsx` — Winding config & force calculations
-- `cad/24mm eine Achse SIM.step` — CAD geometry
-- `simulations/config1_20mm.FEM` — FEMM project
+| Step | Method | Status |
+|------|--------|--------|
+| 1. FEMM simulation | Static field + force | ✓ Complete |
+| 2. Python dynamics | MMK traveling wave | ✓ Complete |
+| 3. Static force test | Measure F vs I | Pending |
+| 4. Dynamic test | FOC velocity control | Pending |
+| 5. Performance | Efficiency, thermal | Pending |
 
 ## License
 
@@ -96,4 +113,4 @@ See [LICENSE](LICENSE).
 
 ---
 
-*Pole pitch 30mm, 24mm diameter, 3-phase FOC control.*
+*Parametric tubular linear motor. Pole pitch λ = 30mm, 24mm diameter, 3-phase FOC.*

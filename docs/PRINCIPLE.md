@@ -74,9 +74,11 @@ FEMM simulations show the magnetic field distribution throughout the motor: fiel
 
 ## Star-Connected BLDC Driver Simulation
 
-The motor uses a star-connected 3-phase winding configuration (AbCaBc) with SimpleFOC control. The simulation below models the **correct physics for a tubular linear motor**: coils distributed **along the motor length**, each interacting with the **local stator B-field** at its position.
+The motor uses a star-connected 3-phase winding configuration (AbCaBc) with SimpleFOC control. The simulation below models the **test setup** configuration: coils distributed **along the motor length**, each interacting with the **local stator B-field** at its position.
 
-### Coil Layout Along Motor Length
+**Note:** This simulation uses the specific test setup parameters (30mm pole pitch, 6 coils spanning one pole pitch). The general parametric design allows scaling these dimensions — see [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md) for scaling guidelines.
+
+### Test Setup Coil Layout
 
 ```
 Position:   0mm    5mm    10mm   15mm   20mm   25mm   30mm (pole pitch)
