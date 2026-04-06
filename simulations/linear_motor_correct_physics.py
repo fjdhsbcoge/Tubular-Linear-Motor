@@ -1,31 +1,31 @@
 """
-Tubular Linear Motor - Correct MMK Simulation
-==============================================
+Tubular Linear Motor - Correct MMK Simulation (Test Setup)
+===========================================================
 
-This simulation models the actual physics of a tubular linear motor:
-- 6 coils distributed ALONG the motor length (not angularly)
-- Stator has sinusoidal B-field along its length: B(x) = B_max * sin(2πx/λ)
+This simulation models the TEST SETUP configuration:
+- 18 coils (3 × AbCaBc blocks) distributed ALONG motor length
+- Stator has sinusoidal B-field: B(x) = B_max * sin(2πx/λ)
 - Each coil produces MMK that interacts with LOCAL stator field
-- Force = MMK × B_field at each position, summed across all coils
+- Force = MMK × B_field at each position, summed across all 18 coils
 
-AbCaBc Winding Layout (along motor length):
-  Position:  0mm    5mm    10mm   15mm   20mm   25mm   30mm (pole pitch)
-             [A]    [b]    [C]    [a]    [B]    [c]
-             │      │      │      │      │      │
-  Phase:     U      V      W      U      V      W
-  Direction: +      -      +      -      +      -
+AbCaBc Winding Layout (Test Setup - 3 blocks = 90mm total):
+  Block 1 (0-30mm):   Block 2 (30-60mm):   Block 3 (60-90mm):
+  [A]  [b]  [C]      [A]  [b]  [C]        [A]  [b]  [C]
+  [a]  [B]  [c]      [a]  [B]  [c]        [a]  [B]  [c]
 
 Key Physics:
-- MMK from each coil is concentrated at its position (not distributed)
-- Force = Σ (MMK_coil × B_stator(x_coil)) across all 6 coils
+- MMK from each coil is concentrated at its position
+- Force = Σ (MMK_coil × B_stator(x_coil)) across all 18 coils
 - The traveling MMK wave "locks" into the stator field and pulls the mover
+- Force values are RELATIVE (simplified 1D model)
+- Actual force from FEMM: 60 N at 2 A (with full 2D geometry)
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
+def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0, n_blocks=3):
     """
     Simulate the tubular linear motor with correct spatial physics.
     
@@ -37,6 +37,8 @@ def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
         Distance between same poles (N-to-N) in mm
     coil_width_mm : float
         Width of each coil in mm (pole_pitch/6 for concentrated winding)
+    n_blocks : int
+        Number of AbCaBc blocks (test setup: 3 blocks = 18 coils, 90mm)
     
     Returns:
     --------
@@ -49,9 +51,9 @@ def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
     force : array
         Total force at each time step [N]
     coil_positions_mm : array
-        Positions of the 6 coils [mm]
+        Positions of all coils [mm]
     coil_currents : 2D array
-        Current in each coil at each time [6 x time]
+        Current in each coil at each time [n_coils x time]
     """
     
     omega = 2 * np.pi * 50  # 50 Hz electrical
@@ -72,14 +74,29 @@ def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
     i_V = (v_V - v_n) / R_phase
     i_W = (v_W - v_n) / R_phase
     
-    # Coil layout along motor length (AbCaBc pattern)
-    # Coils are spaced by pole_pitch/6 = 5mm
-    coil_positions_mm = np.array([0, 5, 10, 15, 20, 25])  # mm along motor
-    coil_phases = ['U', 'V', 'W', 'U', 'V', 'W']
-    coil_directions = [1, -1, 1, -1, 1, -1]  # A(+), b(-), C(+), a(-), B(+), c(-)
+    # Coil layout along motor length (AbCaBc pattern, repeated n_blocks times)
+    # Each block has 6 coils spaced by pole_pitch/6 = 5mm
+    block_positions = np.array([0, 5, 10, 15, 20, 25])  # mm within one pole pitch
+    block_phases = ['U', 'V', 'W', 'U', 'V', 'W']
+    block_directions = [1, -1, 1, -1, 1, -1]  # A(+), b(-), C(+), a(-), B(+), c(-)
+    
+    # Generate all coil positions for n_blocks
+    coil_positions_mm = []
+    coil_phases = []
+    coil_directions = []
+    
+    for block in range(n_blocks):
+        offset = block * pole_pitch_mm
+        for pos, phase, direction in zip(block_positions, block_phases, block_directions):
+            coil_positions_mm.append(offset + pos)
+            coil_phases.append(phase)
+            coil_directions.append(direction)
+    
+    coil_positions_mm = np.array(coil_positions_mm)
+    n_coils = len(coil_positions_mm)
     
     # Current in each coil at each time
-    coil_currents = np.zeros((6, len(time_points)))
+    coil_currents = np.zeros((n_coils, len(time_points)))
     for i, phase in enumerate(coil_phases):
         if phase == 'U':
             coil_currents[i] = i_U * coil_directions[i]
@@ -103,7 +120,7 @@ def simulate_linear_motor(time_points, pole_pitch_mm=30.0, coil_width_mm=5.0):
         mmk = np.zeros_like(positions_mm)
         instantaneous_force = 0
         
-        for coil_idx in range(6):
+        for coil_idx in range(n_coils):
             coil_pos = coil_positions_mm[coil_idx]
             coil_current = coil_currents[coil_idx, t_idx]
             
@@ -141,7 +158,7 @@ def plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, time,
     ax1.set_xlabel('Position along motor [mm]')
     ax1.set_ylabel('B-field [T]')
     ax1.set_title('Stator B-Field Distribution (Static)', fontsize=12, fontweight='bold')
-    ax1.set_xlim(-5, 35)
+    ax1.set_xlim(-5, max(coil_positions) + 10)
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
@@ -177,7 +194,7 @@ def plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, time,
     ax3.set_xlabel('Position along motor [mm]')
     ax3.set_ylabel('Time [ms]')
     ax3.set_title('MMK Space-Time Diagram (Traveling Wave)', fontsize=12, fontweight='bold')
-    ax3.set_xlim(-5, 35)
+    ax3.set_xlim(-5, max(coil_positions) + 10)
     cbar = plt.colorbar(im, ax=ax3)
     cbar.set_label('MMK [A]', rotation=270, labelpad=20)
     
@@ -202,7 +219,7 @@ def plot_linear_motor_overview(positions_mm, b_field, mmk_data, force, time,
 
 
 def plot_snapshots_linear(positions_mm, b_field, mmk_data, coil_positions, 
-                           coil_currents, time, pole_pitch,
+                           coil_currents, time, pole_pitch, n_blocks=3,
                            save_path='linear_motor_snapshots.png'):
     """Plot snapshots showing B-field and MMK interaction at different times."""
     
@@ -245,19 +262,22 @@ def plot_snapshots_linear(positions_mm, b_field, mmk_data, coil_positions,
         ax.set_xlabel('Position [mm]')
         if idx % 3 == 0:
             ax.set_ylabel('MMK [A] / B-field [T]')
-        ax.set_xlim(-2, 32)
+        ax.set_xlim(-2, n_blocks * 30 + 2)
         ax.set_ylim(-0.7, 0.7)
         if idx == 0:
             ax.legend(loc='upper right', fontsize=8)
         ax.grid(True, alpha=0.3)
         
-        # Add coil labels
-        coil_names = ['A', 'b', 'C', 'a', 'B', 'c']
+        # Add coil labels (repeating A-b-C-a-B-c for each block)
+        coil_names = []
+        for block in range(n_blocks):
+            coil_names.extend(['A', 'b', 'C', 'a', 'B', 'c'])
         for pos, name in zip(coil_positions, coil_names):
-            ax.text(pos, -0.6, name, ha='center', fontsize=9, fontweight='bold')
+            ax.text(pos, -0.6, name, ha='center', fontsize=8, fontweight='bold')
     
-    plt.suptitle('Linear Motor: MMK (bars) interacting with Stator B-field (blue curve)\n' +
-                'Force = Σ (MMK × B) at each coil position', 
+    plt.suptitle(f'Linear Motor: MMK (bars) interacting with Stator B-field (blue curve)\n'
+                f'{len(coil_positions)} coils ({n_blocks}× AbCaBc blocks) — '
+                f'Force = Σ (MMK × B) at each coil position', 
                 fontsize=13, fontweight='bold', y=1.02)
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
@@ -266,15 +286,20 @@ def plot_snapshots_linear(positions_mm, b_field, mmk_data, coil_positions,
 
 
 def main():
-    print("Tubular Linear Motor Simulation")
+    print("Tubular Linear Motor Simulation (Test Setup)")
     print("=" * 50)
     
     t = np.linspace(0, 0.04, 400)  # 2 periods at 50Hz
     
+    # Test setup: 3 blocks = 18 coils = 90mm total
+    n_blocks = 3
     positions_mm, b_field, mmk_data, force, coil_pos, coil_curr, pole_pitch = \
-        simulate_linear_motor(t, pole_pitch_mm=30.0, coil_width_mm=5.0)
+        simulate_linear_motor(t, pole_pitch_mm=30.0, coil_width_mm=5.0, n_blocks=n_blocks)
     
-    print(f"\nMotor Parameters:")
+    print(f"\nMotor Parameters (Test Setup):")
+    print(f"  Number of AbCaBc blocks: {n_blocks}")
+    print(f"  Total coils: {len(coil_pos)} (6 coils per block)")
+    print(f"  Total mover length: {n_blocks * 30} mm")
     print(f"  Pole pitch: {pole_pitch} mm")
     print(f"  Coil positions: {coil_pos} mm")
     print(f"  Peak B-field: {np.max(b_field):.2f} T")
@@ -288,7 +313,7 @@ def main():
                                 coil_pos, coil_curr, pole_pitch,
                                 'linear_motor_overview.png')
     plot_snapshots_linear(positions_mm, b_field, mmk_data, coil_pos, coil_curr,
-                          t, pole_pitch, 'linear_motor_snapshots.png')
+                          t, pole_pitch, n_blocks, 'linear_motor_snapshots.png')
     
     print("\nKey Physics:")
     print("  - Coils distributed ALONG motor length (0, 5, 10, 15, 20, 25 mm)")
