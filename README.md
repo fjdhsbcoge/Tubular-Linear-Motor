@@ -32,8 +32,8 @@ This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC dri
 ![MMK Overview](simulations/images/mmk_overview.png)
 *Overview of driver voltages, neutral point voltage, phase currents, and the resulting traveling MMK wave. Note how the 0-4V unipolar output creates ±0.5A bipolar currents through the floating neutral mechanism.*
 
-![Spatial MMK Distribution](simulations/images/mmk_spatial.png)
-*Spatial MMK distribution at different electrical angles (0° to 180°). The six coils (A-b-C-a-B-c) create a traveling wave that rotates the magnetic field. Individual coil contributions (dashed) sum to form the resultant MMK (solid black line).*
+![Spatial MMK Distribution](simulations/images/mmk_spatial_with_bars.png)
+*Spatial MMK distribution at different electrical angles (0° to 180°). The six coils (A-b-C-a-B-c) create a traveling wave that rotates the magnetic field. Individual coil contributions (dashed) sum to form the resultant MMK (solid black line). Red stars mark the sum at θ=0°, verifying the calculation (e.g., +0.724 at ωt=30°, +1.500 at ωt=90°).*
 
 - **Stator**: Permanent magnets create outward sine-wave field
 - **Mover**: 3-phase coils create traveling inward field  
