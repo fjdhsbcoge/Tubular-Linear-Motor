@@ -6,20 +6,6 @@ Open-source tubular linear motor with FOC control. **Parametric design** — sca
 
 This project provides a **general parametric design** for tubular linear motors that can be scaled to different sizes while maintaining proper field geometry. The repository also documents a **specific test setup** being built for initial verification.
 
-### Test Setup (Being Verified)
-
-The simulations and CAD files in this repository represent a specific test configuration:
-
-| Parameter | Value |
-|-----------|-------|
-| Outer Diameter | 24 mm |
-| Pole Pitch (λ) | 30 mm |
-| Coil Width | 5 mm (λ/6) |
-| Mover Length | 90 mm (3× λ) |
-| Simulated Force | 60 N at 2 A |
-
-See [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) for complete scaling guidelines and how to choose electrical parameters (resistance, inductance) based on driver capabilities and force requirements.
-
 ## CAD Design
 
 Cross-sectional view showing the internal structure with stator magnets and coil arrangement:
@@ -59,6 +45,19 @@ Mover: AbCaBc repeated X times
 Width of one AbCaBc block = Pole pitch (λ)
 Total mover length = X × λ
 ```
+### Test Setup (Being Verified)
+
+The simulations and CAD files in this repository represent a specific test configuration:
+
+| Parameter | Value |
+|-----------|-------|
+| Outer Diameter | 20 mm |
+| Pole Pitch (λ) | 30 mm |
+| Coil Width | 5 mm (λ/6) |
+| Mover Length | 90 mm (3× λ) |
+| Simulated Force | 60 N at 2 A |
+
+See [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) for complete scaling guidelines and how to choose electrical parameters (resistance, inductance) based on driver capabilities and force requirements.
 
 ## Update July 2026:
 
