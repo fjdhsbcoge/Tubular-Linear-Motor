@@ -61,7 +61,7 @@ See [docs/DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md) for complete scaling 
 
 ## Update July 2026:
 
-Back EMF was measured, moving the coils over the stator arrangement fast gives this voltage response:
+Back EMF was measured, moving the coils by hand over the stator arrangement fast gives this voltage response:
 
 ![BACK EMF moving the protoype mover by hand fast](260618_BackEMF/Back_EMF_fast_movement.png)
 
@@ -72,8 +72,8 @@ The voltage lines show a threephase response, exactly what you expect. Reversely
 The "magnetical gear" configuration was designed by using FEMM and Excel.
 For a deep dive look into ![Simulation](simulations).
 
-THe goal was to create a motor that also uses the current flowing back from the starpoint. 
-(eg. Phase A is energized with 2A, Phase B and Phase C = -1A).
+The goal was to create a motor that also uses the current flowing back from the starpoint. 
+(eg. Phase A is energized with 2A, Phase B and Phase C = -1A (Kirchhoffs Law)).
 
 ## Documentation
 
