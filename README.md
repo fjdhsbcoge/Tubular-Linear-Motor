@@ -6,22 +6,13 @@ Open-source tubular linear motor with FOC control. **Parametric design** — sca
 
 This project provides a **general parametric design** for tubular linear motors that can be scaled to different sizes while maintaining proper field geometry. The repository also documents a **specific test setup** being built for initial verification.
 
-### Parametric Design Principles
+## Update July 2026:
 
-The motor follows these invariant relationships:
+Back EMF was measured, moving the coils over the stator arrangement fast gives this voltage response:
 
-| Ratio | Value | Description |
-|-------|-------|-------------|
-| Coil width / Pole pitch | 1/6 | 6 coils per pole pitch (AbCaBc) |
-| Spacer width / Magnet width | 0.9–1.2 | Flux shaping optimization |
-| Edge rounding | ~5 × disk diameter | Sinusoidal field formation |
+![BACK EMF moving the protoype mover by hand fast](260618_BackEMF/Back_EMF_fast_movement.png)
 
-**General Formula:**
-```
-Mover: AbCaBc repeated X times
-Width of one AbCaBc block = Pole pitch (λ)
-Total mover length = X × λ
-```
+The voltage lines show a threephase response, exactly what you expect. Reversely, applying a sinusoidal three phase current on the motor will create a force and movement.
 
 ### Test Setup (Being Verified)
 
@@ -59,6 +50,24 @@ The motor operates on a magnetic gearing principle where two sine-wave fields in
 
 ![Stator Field](simulations/images/stator_field_sinusoidal.jpg)
 *Sinusoidal B-field along the stator — each period corresponds to one pole pair (N-S), forming the "teeth" of the magnetic gear*
+
+### Parametric Design Principles
+
+The motor follows these invariant relationships:
+
+| Ratio | Value | Description |
+|-------|-------|-------------|
+| Coil width / Pole pitch | 1/6 | 6 coils per pole pitch (AbCaBc) |
+| Spacer width / Magnet width | 0.9–1.2 | Flux shaping optimization |
+| Edge rounding | ~5 × disk diameter | Sinusoidal field formation |
+
+**General Formula:**
+```
+Mover: AbCaBc repeated X times
+Width of one AbCaBc block = Pole pitch (λ)
+Total mover length = X × λ
+```
+
 
 ## BLDC Star-Connected Motor Simulation (Test Setup)
 
