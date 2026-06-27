@@ -6,14 +6,6 @@ Open-source tubular linear motor with FOC control. **Parametric design** — sca
 
 This project provides a **general parametric design** for tubular linear motors that can be scaled to different sizes while maintaining proper field geometry. The repository also documents a **specific test setup** being built for initial verification.
 
-## Update July 2026:
-
-Back EMF was measured, moving the coils over the stator arrangement fast gives this voltage response:
-
-![BACK EMF moving the protoype mover by hand fast](260618_BackEMF/Back_EMF_fast_movement.png)
-
-The voltage lines show a threephase response, exactly what you expect. Reversely, applying a sinusoidal three phase current on the motor will create a force and movement.
-
 ### Test Setup (Being Verified)
 
 The simulations and CAD files in this repository represent a specific test configuration:
@@ -68,26 +60,21 @@ Width of one AbCaBc block = Pole pitch (λ)
 Total mover length = X × λ
 ```
 
+## Update July 2026:
 
-## BLDC Star-Connected Motor Simulation (Test Setup)
+Back EMF was measured, moving the coils over the stator arrangement fast gives this voltage response:
 
-This simulation demonstrates how unipolar 0-4V PWM voltages from a SimpleFOC driver create bipolar currents and force. It models the **test setup** configuration (30mm pole pitch, 6 coils spanning one pole pitch). The general parametric design allows scaling — see [DESIGN_PRINCIPLES.md](docs/DESIGN_PRINCIPLES.md).
+![BACK EMF moving the protoype mover by hand fast](260618_BackEMF/Back_EMF_fast_movement.png)
 
-Unlike a rotating motor where coils are angularly distributed, here the 6 coils are spaced **along the motor length** (0, 5, 10, 15, 20, 25 mm), each interacting with the **local** sinusoidal B-field from the stator magnets.
+The voltage lines show a threephase response, exactly what you expect. Reversely, applying a sinusoidal three phase current on the motor will create a force and movement.
 
-![Linear Motor Overview](simulations/images/linear_motor_overview.png)
-*Top-left: Static sinusoidal B-field from stator magnets (period = 30 mm pole pitch) with 18 coil positions marked. Top-right: **Unipolar 0-4V driver outputs** (3 phases) and **floating neutral voltage** (red dashed at 2V) — this is the raw PWM output from SimpleFOC. Bottom-left: **Bipolar ±0.5A phase currents** created by the floating neutral mechanism: I = (V_driver - V_neutral) / R. Bottom-right: Resultant force on mover (relative values).*
+## Motor design via Excel and FEMM
 
-![Linear Motor Snapshots](simulations/images/linear_motor_snapshots.png)
-*MMK distribution (red bars) interacting with stator B-field (blue curve) at different electrical angles. Force = Σ(MMK × B) at each coil position (relative values shown). With FOC, the mover tracks the field to maintain continuous force.*
+The "magnetical gear" configuration was designed by using FEMM and Excel.
+For a deep dive look into ![Simulation](simulations).
 
-**Key insight:** In a linear motor, each coil produces force proportional to its MMK × local B-field. The sum of all 6 coil forces drives the mover. The floating neutral mechanism converts unipolar 0-4V PWM into bipolar ±0.5A currents, creating the traveling MMK wave that "locks" into the stator field.
-
-**Note:** The simulation shows **relative force** values for visualization. The **60 N at 2 A** value comes from detailed FEMM simulations with full 2D geometry including flux concentration effects.
-
-- **Stator**: Permanent magnets create outward sine-wave B-field (static)
-- **Mover**: 6 coils in AbCaBc pattern create traveling MMK wave  
-- **Force**: Sum of local MMK × B interactions (relative values in sim, 60N actual from FEMM)
+THe goal was to create a motor that also uses the current flowing back from the starpoint. 
+(eg. Phase A is energized with 2A, Phase B and Phase C = -1A).
 
 ## Documentation
 
